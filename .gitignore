@@ -126,7 +126,7 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.nar
 *.ear
@@ -167,6 +167,5 @@ $RECYCLE.BIN/
 .gradle
 .idea
 .class
-application-oauth.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,java
