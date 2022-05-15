@@ -40,7 +40,7 @@ public class HttpRequestUtilsTest {
         String queryString = "userId=javajigi&password";
         Map<String, String> parameters = HttpRequestUtils.parseQueryString(queryString);
         assertThat(parameters.get("userId")).isEqualTo("javajigi");
-        assertThat(parameters.get("password")).isEqualTo(nullValue());
+        assertThat(parameters.get("password")).isNull();
     }
 
     @Test
@@ -49,7 +49,7 @@ public class HttpRequestUtilsTest {
         Map<String, String> parameters = HttpRequestUtils.parseCookies(cookies);
         assertThat(parameters.get("logined")).isEqualTo("true");
         assertThat(parameters.get("JSessionId")).isEqualTo("1234");
-        assertThat(parameters.get("session")).isEqualTo(nullValue());
+        assertThat(parameters.get("session")).isNull();
     }
 
     @Test
@@ -61,7 +61,7 @@ public class HttpRequestUtilsTest {
     @Test
     public void getKeyValue_invalid() throws Exception {
         Pair pair = HttpRequestUtils.getKeyValue("userId", "=");
-        assertThat(pair).isEqualTo(nullValue());
+        assertThat(pair).isNull();
     }
 
     @Test
