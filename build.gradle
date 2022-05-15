@@ -36,5 +36,5 @@ test {
 
 jar {
     manifest.attributes 'Main-Class': 'webserver.WebServer'
-    enabled = false
+    // enabled = false
 }
