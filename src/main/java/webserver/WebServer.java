@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-@Slf4j
 public class WebServer {
+    private static final Logger log = LoggerFactory.getLogger(WebServer.class);
     private static final int DEFAULT_PORT = 8088;
 
     public static void main(String[] args) throws Exception {
