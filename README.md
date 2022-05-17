@@ -15,6 +15,11 @@
 * 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
 ### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
+* BufferedReader 클래스를 이용해 HTTP Header 한 줄씩 읽기
+* 헤더의 마지막은 while(!"".equals(line))으로 확인하기
+* line == null 경우 루프에서 빠져 나와야 함
+* Header를 읽어 String 배열에 저장 후 Parse or line마다 Parse 무슨 방법이 옳을지?
+* Files.readAllBytes()를 이용해 Bytes 배열로 파일 읽어들이기
 * 
 
 ### 요구사항 2 - get 방식으로 회원가입
