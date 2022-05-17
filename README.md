@@ -16,13 +16,22 @@
 
 ### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
 * BufferedReader 클래스를 이용해 HTTP Header 한 줄씩 읽기
-* 헤더의 마지막은 while(!"".equals(line))으로 확인하기
-* line == null 경우 루프에서 빠져 나와야 함
-* Header를 읽어 String 배열에 저장 후 Parse or line마다 Parse 무슨 방법이 옳을지?
+* 헤더의 마지막은 while(!line.equals(""))으로 확인하기
+* line == null return 필요
+* 요청 라인을 우선적으로 읽어서 URI 를 거르기
 * Files.readAllBytes()를 이용해 Bytes 배열로 파일 읽어들이기
-* 
+* HTTP 요청(응답) 구조: 요청(응답) 라인, 요청(응답) 헤더, 공백 라인, 요청 본문(body)
+* 서버는 웹 페이지를 구성하는 모든 자원(HTML, CSS, 자바스크립트, 이미지 등)을 한 번에 응답으로 보내지 않는다.
+* 브라우저는 HTML 을 분석해 추가 자원이 필요한 경우 서버에 다시 해당 자원을 요청하게 된다.
 
 ### 요구사항 2 - get 방식으로 회원가입
+* Arrays 클래스: 배열 조작 기능(복사, 정렬, 검색 등)
+* stream(arr): 배열 혹은 컬렉션 인스턴스를 함수형으로 처리할 수 있음
+* 생성하기, 가공하기, 결과 만들기의 과정으로 나누어 볼 수 있음
+* filter(): 스트림 내 요소를 평가해 걸러냄
+* map(): 스트림 내 요소를 하나씩 특정 값으로 변환해줌
+* collect(): 필터, 매핑된 요소들을 새로운 컬렉션에 수집해서 반환해줌
+* Collectors.toMap(): Map 형태의 컬렉션 만들기
 * 
 
 ### 요구사항 3 - post 방식으로 회원가입

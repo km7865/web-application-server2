@@ -32,6 +32,12 @@ public class HttpRequestUtils {
         }
 
         String[] tokens = values.split(separator);
+        /*
+        tokens 배열의 스트림을 생성한다. ex) {"userId=1", "password=2", "name=3", "email=4"}
+        map(): 정규식 "="를 기준으로 split하여 {key, value} 쌍으로 이루어진 Pair를 반환한다.
+        filter(): null 값을 거른다.
+        collect(Collectors.toMap()): Map<String, String>의 새로운 형태인 컬렉션을 만들어 반환한다.
+        */
         return Arrays.stream(tokens).map(t -> getKeyValue(t, "=")).filter(p -> p != null)
                 .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
     }
