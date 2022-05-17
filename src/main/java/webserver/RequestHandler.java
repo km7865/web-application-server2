@@ -6,10 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
-public class RequestHandler {
+public class RequestHandler extends Thread {
 
     private Socket connection;
 
