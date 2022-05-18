@@ -15,6 +15,7 @@
 * 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
 ### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
+* Closeable: try 와 같은 구문의 바디 부분이 실행된 후 자동으로 닫히길 원할 때 사용
 * BufferedReader 클래스를 이용해 HTTP Header 한 줄씩 읽기
 * 헤더의 마지막은 while(!line.equals(""))으로 확인하기
 * line == null return 필요
@@ -42,12 +43,19 @@
 * Response Header 의 "Location" field 에 redirect url 명시
 * 클라이언트는 Location 을 보고 서버에 redirect url 재요청
 
-### 요구사항 5 - cookie
+### 요구사항 5 - 로그인 (cookie)
 * 서버가 클라이언트에 전송하여 클라이언트가 저장하고 있음
 * Response Header 의 "Set-Cookie" field 에 <cookie-name>=<cookie-value> 형태로 명시
 * 클라이언트는 응답 헤더에 Set-Cookie 가 존재할 경우 값을 읽어 서버에 다시 전송한다.
 
-### 요구사항 6 - stylesheet 적용
+### 요구사항 6 - 사용자 목록 출력
+* Boolean.parseBoolean(String)
+* StringBuilder 사용 
+* String 은 불변이기 때문에 직접적인 연산(+)시 객체 생성, 삭제가 내부적으로 수행되고
+* 그에 따라 성능 이슈(메모리,속도)가 생김 따라서 Builder 로 그 문제를 해결함
+
+### 요구사항 7 - stylesheet 적용
+* 요청 헤더의 Accept 필드 확인 후 그에 맞춰 응답 헤더의 Content-Type 필드 명시
 * 
 
 ### heroku 서버에 배포 후
