@@ -18,7 +18,7 @@
 * BufferedReader 클래스를 이용해 HTTP Header 한 줄씩 읽기
 * 헤더의 마지막은 while(!line.equals(""))으로 확인하기
 * line == null return 필요
-* 요청 라인을 우선적으로 읽어서 URI 를 거르기
+* 요청 라인을 우선적으로 읽어서 요청 URL 판단하기
 * Files.readAllBytes()를 이용해 Bytes 배열로 파일 읽어들이기
 * HTTP 요청(응답) 구조: 요청(응답) 라인, 요청(응답) 헤더, 공백 라인, 요청 본문(body)
 * 서버는 웹 페이지를 구성하는 모든 자원(HTML, CSS, 자바스크립트, 이미지 등)을 한 번에 응답으로 보내지 않는다.
@@ -32,16 +32,20 @@
 * map(): 스트림 내 요소를 하나씩 특정 값으로 변환해줌
 * collect(): 필터, 매핑된 요소들을 새로운 컬렉션에 수집해서 반환해줌
 * Collectors.toMap(): Map 형태의 컬렉션 만들기
-* 
 
 ### 요구사항 3 - post 방식으로 회원가입
-* 
+* QueryString 대신 Content-Length 에 본문의 길이를 명시함
+* Request Body 가 전달되는 시점 생각하여 Body read 하기
+* form 태그가 지원하는 method 는 GET, POST 뿐
 
 ### 요구사항 4 - redirect 방식으로 이동
-* 
+* Response Header 의 "Location" field 에 redirect url 명시
+* 클라이언트는 Location 을 보고 서버에 redirect url 재요청
 
 ### 요구사항 5 - cookie
-* 
+* 서버가 클라이언트에 전송하여 클라이언트가 저장하고 있음
+* Response Header 의 "Set-Cookie" field 에 <cookie-name>=<cookie-value> 형태로 명시
+* 클라이언트는 응답 헤더에 Set-Cookie 가 존재할 경우 값을 읽어 서버에 다시 전송한다.
 
 ### 요구사항 6 - stylesheet 적용
 * 
