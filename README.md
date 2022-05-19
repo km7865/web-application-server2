@@ -15,10 +15,10 @@
 * 각 요구사항을 구현하는 것이 중요한 것이 아니라 구현 과정을 통해 학습한 내용을 인식하는 것이 배움에 중요하다. 
 
 ### 요구사항 1 - http://localhost:8080/index.html로 접속시 응답
-* Closeable: try 와 같은 구문의 바디 부분이 실행된 후 자동으로 닫히길 원할 때 사용
+* Closeable: try 와 같은 구문의 바디 부분이 실행된 후 자동으로 닫히길 원할 때 사용한다.
 * BufferedReader 클래스를 이용해 HTTP Header 한 줄씩 읽기
 * 헤더의 마지막은 while(!line.equals(""))으로 확인하기
-* line == null return 필요
+* 값이 null 인 요청이 중복으로 들어올 수 있기에 line == null return 필요
 * 요청 라인을 우선적으로 읽어서 요청 URL 판단하기
 * Files.readAllBytes()를 이용해 Bytes 배열로 파일 읽어들이기
 * HTTP 요청(응답) 구조: 요청(응답) 라인, 요청(응답) 헤더, 공백 라인, 요청 본문(body)
@@ -58,5 +58,10 @@
 * 요청 헤더의 Accept 필드 확인 후 그에 맞춰 응답 헤더의 Content-Type 필드 명시
 * 
 
-### heroku 서버에 배포 후
+### 서버 구조 변경 사항
+* RequestHandler 클래스에서 기능이 하나씩 추가될 때마다 분기문이 추가되는 방식
+* 자바의 다형성을 활용해 분기문 제거
 * 
+
+
+### heroku 서버에 배포 후
