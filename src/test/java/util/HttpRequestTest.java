@@ -10,14 +10,24 @@ public class HttpRequestTest {
     private String testDirectory = "./src/test/resources/";
 
     @Test
-    public void GET_요청() throws IOException {
-        InputStream in = new FileInputStream(testDirectory + "Http_GET.txt");
+    public void GET_JS_요청() throws IOException {
+        InputStream in = new FileInputStream(testDirectory + "Http_GET_js.txt");
         HttpRequest request = new HttpRequest(in);
 
-        assertThat("GET").isEqualTo(request.getMethod());
-        assertThat("/user/create").isEqualTo(request.getUrl());
-        assertThat("keep-alive").isEqualTo(request.getHeader("Connection"));
-        assertThat("dongwon").isEqualTo(request.getParameter("userId"));
+        assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
+        assertThat(request.getPath()).isEqualTo("/js/bootstrap.min.js");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
+    }
+
+    @Test
+    public void GET_CSS_요청() throws IOException {
+        InputStream in = new FileInputStream(testDirectory + "Http_GET_css.txt");
+        HttpRequest request = new HttpRequest(in);
+
+        assertThat(request.getMethod()).isEqualTo(HttpMethod.GET);
+        assertThat(request.getPath()).isEqualTo("/css/bootstrap.min.css");
+        assertThat(request.getHeader("Accept")).isEqualTo("text/css");
+        assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
     }
 
     @Test
@@ -25,8 +35,8 @@ public class HttpRequestTest {
         InputStream in = new FileInputStream(testDirectory + "Http_POST.txt");
         HttpRequest request = new HttpRequest(in);
 
-        assertThat(request.getMethod()).isEqualTo("POST");
-        assertThat(request.getUrl()).isEqualTo("/user/create");
+        assertThat(request.getMethod()).isEqualTo(HttpMethod.POST);
+        assertThat(request.getPath()).isEqualTo("/user/create");
         assertThat(request.getHeader("Connection")).isEqualTo("keep-alive");
         assertThat(request.getParameter("userId")).isEqualTo("javajigi");
         assertThat(request.getParameter("name")).isEqualTo("Dongwon");

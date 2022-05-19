@@ -21,68 +21,47 @@ GET, POST 메소드에 따라 전달되는 인자를 getParameter("param")를 �
 @Slf4j
 public class HttpRequest {
     private BufferedReader br;
-    private Map<String, String> headers;
-    private Map<String, String> params;
-    private Map<String, String> cookies;
-    private String url;
-    private String method;
-    private byte[] body;
+    private RequestLine requestLine;
+    private Map<String, String> headers = new HashMap<>();
+    private Map<String, String> params = new HashMap<>();
+    private Map<String, String> cookies = new HashMap<>();
 
-    public HttpRequest(InputStream is) throws IOException {
-        headers = new HashMap<>();
-        br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+    public HttpRequest(InputStream is) {
+        try {
+            br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
-        String line = br.readLine();
-        if (line == null) {
-            return;
-        }
-        log.debug("Request Line: {}", line);
-        String[] tokens = line.split(" ");
-        method = tokens[0];
-        url = tokens[1];
-
-        while (!line.equals("")) {
-            line = br.readLine();
-            log.debug("Request header: {}", line);
-            tokens = line.split(": ");
-            if(tokens.length == 2) {
-                headers.put(tokens[0], tokens[1]);
+            String line = br.readLine();
+            if (line == null) {
+                return;
             }
-        }
 
-        if (headers.get("Content-Length") != null) {
-             int contentLength = Integer.parseInt(getHeader("Content-Length"));
-             char[] tmp = new char[contentLength];
-             br.read(tmp, 0, contentLength);
-             body = String.copyValueOf(tmp).getBytes();
-             log.debug("content: {}", String.copyValueOf(tmp));
-        } else {
-            headers.put("Content-Length", "0");
-        }
+            requestLine = new RequestLine(line);
 
-        cookies = HttpRequestUtils.parseCookies(getHeader("Cookie"));
-
-        String resource="";
-        if (method.equals("GET")) {
-            tokens = url.split("\\?");
-            if (tokens.length == 2) {
-                url = tokens[0];
-                resource = tokens[1];
+            String[] tokens;
+            while (!line.equals("")) {
+                line = br.readLine();
+                log.debug("Request header: {}", line);
+                tokens = line.split(": ");
+                if (tokens.length == 2) {
+                    headers.put(tokens[0], tokens[1]);
+                }
             }
-        } else if (method.equals("POST")) {
-            resource = new String(body);
+            if (requestLine.getMethod().isPost()) {
+                String resource = IOUtils.readData(br, Integer.parseInt(getHeader("Content-Length")));
+                params = Arrays.stream(resource.split("&")).map(t -> getKeyValue(t, "="))
+                        .filter(p -> p != null).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
+            } else {
+                params = requestLine.getParams();
+            }
+            cookies = HttpRequestUtils.parseCookies(getHeader("Cookie"));
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
-        params = Arrays.stream(resource.split("&")).map(t -> getKeyValue(t, "="))
-                .filter(p -> p != null).collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()));
-    }
 
-    public boolean containsHeader(String field) {
-        return headers.containsKey(field);
     }
 
     public String getHeader(String field) {
-        String value = headers.get(field);
-        return value == null ? "" : value;
+        return headers.get(field);
     }
 
     public String getParameter(String param) {
@@ -90,19 +69,14 @@ public class HttpRequest {
     }
 
     public String getCookie(String name) {
-
         return cookies.get(name);
     }
 
-    public String getUrl() {
-        return url;
+    public String getPath() {
+        return requestLine.getPath();
     }
 
-    public String getMethod() {
-        return method;
-    }
-
-    public byte[] getBody() {
-        return body;
+    public HttpMethod getMethod() {
+        return requestLine.getMethod();
     }
 }
