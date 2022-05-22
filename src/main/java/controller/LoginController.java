@@ -7,7 +7,7 @@ import util.HttpResponse;
 
 public class LoginController extends AbstractController {
     @Override
-    void doPost(HttpRequest req, HttpResponse resp) {
+    public void doPost(HttpRequest req, HttpResponse resp) {
         User user = DataBase.findUserById(req.getParameter("userId"));
         if (user == null) {
             resp.forward("/user/login_failed.html");

@@ -4,20 +4,20 @@ import util.HttpMethod;
 import util.HttpRequest;
 import util.HttpResponse;
 
-public class AbstractController implements Controller {
+public abstract class AbstractController implements Controller {
     @Override
     public void service(HttpRequest req, HttpResponse resp) {
-        if (req.getMethod() == HttpMethod.GET) {
-            doGet(req, resp);
-        } else if (req.getMethod() == HttpMethod.POST) {
+        if (req.getMethod().isPost()) {
             doPost(req, resp);
+        } else {
+            doGet(req, resp);
         }
     }
 
-    void doGet(HttpRequest req, HttpResponse resp) {
-        resp.forward(req.getPath());
+    protected void doGet(HttpRequest req, HttpResponse resp) {
+
     }
-    void doPost(HttpRequest req, HttpResponse resp) {
-        resp.sendRedirect("/index.html");
+    protected void doPost(HttpRequest req, HttpResponse resp) {
+
     }
 }

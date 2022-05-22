@@ -20,17 +20,13 @@ import util.*;
 public class RequestHandler extends Thread {
 
     private Socket connection;
-    private Map<String, Controller> controllers;
+    private RequestMapping requestMapping;
     private HttpRequest req;
     private HttpResponse resp;
 
     public RequestHandler(Socket connection) {
         this.connection = connection;
-
-        controllers = new HashMap<>();
-        controllers.put("/user/create", new CreateUserController());
-        controllers.put("/user/login", new LoginController());
-        controllers.put("/user/list", new ListUserController());
+        requestMapping = new RequestMapping();
     }
 
     @Override
@@ -39,11 +35,14 @@ public class RequestHandler extends Thread {
             // TODO
             req = new HttpRequest(in);
             resp = new HttpResponse(out);
-            log.debug("URL: {}", req.getPath());
-            if (!controllers.containsKey(req.getPath())) {
-                new AbstractController().service(req, resp);
+            String url = req.getPath();
+            log.debug("URL: {}", url);
+
+            Controller controller = requestMapping.getController(url);
+            if (controller == null) {
+                resp.forward("/index.html");
             } else {
-                controllers.get(req.getPath()).service(req, resp);
+                controller.service(req, resp);
             }
         } catch (IOException e) {
             log.error(e.getMessage());

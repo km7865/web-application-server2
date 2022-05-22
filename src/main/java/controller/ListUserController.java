@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ListUserController extends AbstractController {
     @Override
-    void doGet(HttpRequest req, HttpResponse resp) {
+    public void doGet(HttpRequest req, HttpResponse resp) {
         if (isLogin(req.getCookie("logined"))) {
             StringBuilder sb = new StringBuilder();
             Collection<User> users = DataBase.findAll();
@@ -25,9 +25,7 @@ public class ListUserController extends AbstractController {
             sb.append("</table>");
 
             byte[] body = sb.toString().getBytes();
-            resp.setBody(body);
-            resp.response200Header();
-            resp.responseBody();
+            resp.forwardBody(body);
         } else {
             resp.sendRedirect("/user/login.html");
         }

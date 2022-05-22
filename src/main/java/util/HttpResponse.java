@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 public class HttpResponse {
@@ -18,7 +19,6 @@ public class HttpResponse {
 
     int statusCode;
     String statusMessage;
-    byte[] body;
 
     public HttpResponse(OutputStream os) {
         this.dos = new DataOutputStream(os);
@@ -33,44 +33,33 @@ public class HttpResponse {
         return headers.get(field);
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    private byte[] makeBody(String url) throws IOException {
+        byte[] body = Files.readAllBytes(new File("./webapp" + url).toPath());
+        return body;
     }
 
-    public String getStatusMessage() {
-        return statusMessage;
-    }
-
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
-
-    public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
-    }
-
-    public void setBody(byte[] body) {
-        this.body = body;
-        addHeader("Content-Length", Integer.toString(body.length));
-    }
-    private void makeBody(String url) throws IOException {
-        body = Files.readAllBytes(new File("./webapp" + url).toPath());
-        addHeader("Content-Length", Integer.toString(body.length));
-    }
-
-    public void response200Header() {
-        int lengthOfBodyContent = Integer.parseInt(getHeader("Content-Length"));
+    public void response200Header(int contentOfLength) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK\r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            processHeaders();
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
 
-    public void responseBody() {
+    private void processHeaders() {
+        try {
+            Set<String> keys = headers.keySet();
+            for (String key : keys) {
+                dos.writeBytes(key + ": " + headers.get(key) + "\r\n");
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public void responseBody(byte[] body) {
         try {
             dos.write(body, 0, body.length);
             dos.flush();
@@ -81,37 +70,37 @@ public class HttpResponse {
 
     public void forward(String url) {
         try {
+            byte[] body = makeBody(url);
+
             if (url.endsWith(".css") || url.endsWith(".ico")) {
                 log.debug("URL: {}", url);
                 addHeader("Content-Type", "text/css");
+            } else if (url.endsWith(".js")){
+                addHeader("Content-Type", "application/javascript");
             } else {
                 addHeader("Content-Type", "text/html;charset=utf-8");
             }
+            addHeader("Content-Length", body.length + "");
 
-            makeBody(url);
-            int lengthOfBodyContent = Integer.parseInt(getHeader("Content-Length"));
-            dos.writeBytes("HTTP/1.1 200 OK\r\n");
-            dos.writeBytes("Content-Type: " + getHeader("Content-Type") + "\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            if (headers.containsKey("Set-Cookie")) {
-                dos.writeBytes("Set-Cookie: " + getHeader("Set-Cookie") + "\r\n");
-            }
-            dos.writeBytes("\r\n");
-            dos.write(body, 0, lengthOfBodyContent);
-            dos.flush();
+            response200Header(body.length);
+            responseBody(body);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
 
+    public void forwardBody(byte[] body) {
+        addHeader("Content-Type", "text/html;charset=utf-8");
+        addHeader("Content-Length", body.length + "");
+        response200Header(body.length);
+        responseBody(body);
+    }
+
     public void sendRedirect(String redirectUrl) {
         try {
             dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            processHeaders();
             dos.writeBytes("Location: " + redirectUrl + "\r\n");
-            if (headers.containsKey("Set-Cookie")) {
-                dos.writeBytes("Set-Cookie: " + getHeader("Set-Cookie") + "\r\n");
-            }
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
