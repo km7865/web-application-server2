@@ -168,4 +168,11 @@ $RECYCLE.BIN/
 .idea
 .class
 
+*.txt
+tomcat.8088/**
+webapp/WEB-INF/**
+
+
+
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,intellij,java
