@@ -1,3 +1,13 @@
+<%--
+Created by IntelliJ IDEA.
+User: km786
+Date: 2022-05-25
+Time: 오후 4:27
+--%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="kr">
 <head>
@@ -53,21 +63,27 @@
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
-            
+
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
             	<span class="sr-only">Toggle navigation</span>
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
-            </button>            
+            </button>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="../index.html">Posts</a></li>
-                <li><a href="../user/login.html" role="button">로그인</a></li>
-                <li><a href="../user/form.html" role="button">회원가입</a></li>
-                <li><a href="#" role="button">로그아웃</a></li>
-                <li><a href="#" role="button">개인정보수정</a></li>
+                <li class="active"><a href="../index.jsp">Posts</a></li>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <li><a href="/user/logout" role="button">로그아웃</a></li>
+                        <li><a href="/user/update.jsp" role="button">개인정보수정</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="/user/login.jsp" role="button">로그인</a></li>
+                        <li><a href="/user/form.jsp" role="button">회원가입</a></li>
+                    </c:otherwise>
+                </c:choose>
             </ul>
         </div>
     </div>

@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="kr">
 	<head>
@@ -11,7 +14,7 @@
 		<![endif]-->
 		<link href="css/styles.css" rel="stylesheet">
 	</head>
-	
+
 	<body>
 <nav class="navbar navbar-fixed-top header">
  	<div class="col-md-12">
@@ -21,7 +24,7 @@
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
           <i class="glyphicon glyphicon-search"></i>
           </button>
-      
+
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse1">
           <form class="navbar-form pull-left">
@@ -32,7 +35,7 @@
                 </div>
               </div>
           </form>
-          <ul class="nav navbar-nav navbar-right">             
+          <ul class="nav navbar-nav navbar-right">
              <li>
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-bell"></i></a>
                 <ul class="dropdown-menu">
@@ -42,8 +45,8 @@
              </li>
              <li><a href="./user/list.html"><i class="glyphicon glyphicon-user"></i></a></li>
            </ul>
-        </div>	
-     </div>	
+        </div>
+     </div>
 </nav>
 <div class="navbar navbar-default" id="subnav">
     <div class="col-md-12">
@@ -54,25 +57,32 @@
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
             </ul>
-            
+
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
             	<span class="sr-only">Toggle navigation</span>
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
             	<span class="icon-bar"></span>
-            </button>            
+            </button>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="index.html">Posts</a></li>
-                <li><a href="user/login.html" role="button">로그인</a></li>
-                <li><a href="user/form.html" role="button">회원가입</a></li>
+                <li class="active"><a href="index.jsp">Posts</a></li>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.user}">
+                        <li><a href="user/logout" role="button">로그아웃</a></li>
+                        <li><a href="user/update.jsp" role="button">개인정보수정</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li><a href="user/login.jsp" role="button">로그인</a></li>
+                        <li><a href="user/form.jsp" role="button">회원가입</a></li>
+                    </c:otherwise>
+                </c:choose>
                 <!--
                 <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
                 <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
                 -->
-                <li><a href="user/logout" role="button">로그아웃</a></li>
-                <li><a href="#" role="button">개인정보수정</a></li>
+
             </ul>
         </div>
     </div>
@@ -168,7 +178,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>  
+      </div>
       </div>
   </div>
   </div>
@@ -210,7 +220,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>  
+      </div>
       </div>
   </div>
   </div>
@@ -223,3 +233,4 @@
 <script src="js/scripts.js"></script>
 	</body>
 </html>
+

@@ -20,13 +20,11 @@ import util.*;
 public class RequestHandler extends Thread {
 
     private Socket connection;
-    private RequestMapping requestMapping;
     private HttpRequest req;
     private HttpResponse resp;
 
     public RequestHandler(Socket connection) {
         this.connection = connection;
-        requestMapping = new RequestMapping();
     }
 
     @Override
@@ -38,7 +36,7 @@ public class RequestHandler extends Thread {
             String url = req.getPath();
             log.debug("URL: {}", url);
 
-            Controller controller = requestMapping.getController(url);
+            Controller controller = RequestMapping.getController(url);
             if (controller == null) {
                 resp.forward("/index.html");
             } else {

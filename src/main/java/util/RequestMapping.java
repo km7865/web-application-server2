@@ -11,16 +11,15 @@ import java.util.Map;
 // 요청 url 에 해당하는 Controller 를 반환하는 역할의 클래스
 @Slf4j
 public class RequestMapping {
-    private Map<String, Controller> controllers;
+    private static final Map<String, Controller> controllers = new HashMap<String, Controller>();
 
-    public RequestMapping() {
-        this.controllers = new HashMap<String, Controller>();
+    static {
         controllers.put("/user/create", new CreateUserController());
         controllers.put("/user/login", new LoginController());
         controllers.put("/user/list", new ListUserController());
     }
 
-    public Controller getController(String url) {
+    public static Controller getController(String url) {
         return controllers.get(url);
     }
 }
