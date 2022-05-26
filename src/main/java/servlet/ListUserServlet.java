@@ -21,21 +21,12 @@ import java.util.Collection;
 public class ListUserServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ServletException, ServletException {
-        if (isLogin(req.getCookies())) {
+        if (req.getSession().getAttribute("user") != null) {
             req.setAttribute("users", DataBase.findAll());
             RequestDispatcher rd = req.getRequestDispatcher("/user/list.jsp");
             rd.forward(req, resp);
         } else {
             resp.sendRedirect("/index.jsp");
         }
-    }
-
-    private boolean isLogin(Cookie[] cookies) {
-        for (Cookie c : cookies) {
-            if (c.getName().equals("logined")) {
-                return c.getValue().equals("true");
-            }
-        }
-        return false;
     }
 }
